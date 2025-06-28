@@ -1,0 +1,26 @@
+# Build artefacts
+.aws-sam/
+
+# Archivos temporales de Cloud9 y editores
+*.swp
+*~
+src/.~*
+
+# Archivos de Python no deseados
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Configuración local
+.env
+.env.*
+
+# Archivos de log (si hubiera)
+*.log
+
+# Archivos SAM ocultos o de despliegue temporal
+.sam-*
+
+# Otros
+.DS_Store
