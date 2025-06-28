@@ -17,6 +17,7 @@ pipeline {
                 sh 'bandit -r src/ || true'
             }
         }
+        
         stage('Deploy (Staging)') {
             steps {
                 echo 'Building project with SAM...'
@@ -28,6 +29,16 @@ pipeline {
                 echo 'Deploying to Staging environment (expecting failure)...'
                 sh 'sam deploy --config-env staging --no-confirm-changeset'
             }
-        }        
+        }
+        
+        stage('REST Test') {
+            environment {
+                BASE_URL = 'https://iw3lwsx0mj.execute-api.us-east-1.amazonaws.com/Prod'
+            }
+            steps {
+                echo 'Running REST integration tests...'
+                sh 'pytest test/integration/todoApiTest.py'
+            }
+        }
     }
 }
