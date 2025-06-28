@@ -27,7 +27,7 @@ pipeline {
                 sh 'sam validate --region us-east-1'
 
                 echo 'Deploying to Staging environment (expecting failure)...'
-                sh 'sam deploy --config-env staging --no-confirm-changeset'
+                sh 'sam deploy --config-env staging --no-confirm-changeset || true'
             }
         }
         
