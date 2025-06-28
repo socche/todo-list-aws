@@ -17,5 +17,17 @@ pipeline {
                 sh 'bandit -r src/ || true'
             }
         }
+        stage('Deploy (Staging)') {
+            steps {
+                echo 'Building project with SAM...'
+                sh 'sam build'
+
+                echo 'Validating template...'
+                sh 'sam validate'
+
+                echo 'Deploying to Staging environment (expecting failure)...'
+                sh 'sam deploy --config-env staging --no-confirm-changeset'
+            }
+        }        
     }
 }
