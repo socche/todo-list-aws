@@ -14,7 +14,7 @@ pipeline {
         stage('Deploy (Production)') {
             agent { label 'agente1' }
             environment {
-              PATH = "/home/agente1/.local/bin:$PATH"
+                PATH = "/home/agente1/.local/bin:$PATH"
             }
             steps {
                 sh 'whoami'
@@ -27,6 +27,9 @@ pipeline {
 
                 echo 'Deploying to Production environment...'
                 sh 'sam deploy --config-env production --no-confirm-changeset || true'
+
+                // Guardar el workspace para el siguiente agente
+                stash name: 'workspace-cd', includes: '**/*'
             }
         }
 
@@ -36,10 +39,9 @@ pipeline {
                 BASE_URL = 'https://iw3lwsx0mj.execute-api.us-east-1.amazonaws.com/Prod'
             }
             steps {
+                unstash 'workspace-cd'
                 sh 'whoami'
                 sh 'hostname'
-                echo 'Re-clonando el repositorio en agente2...'
-                sh 'git clone -b master https://github.com/socche/todo-list-aws.git .'
 
                 echo 'Ejecutando tests de lectura en entorno de producción...'
                 sh 'pytest --junitxml=report.xml test/integration/test_readonly.py'
