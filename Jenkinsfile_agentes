@@ -37,6 +37,7 @@ pipeline {
             agent { label 'agente2' }
             environment {
                 BASE_URL = 'https://iw3lwsx0mj.execute-api.us-east-1.amazonaws.com/Prod'
+                PATH = "/home/agente2/.local/bin:$PATH"
             }
             steps {
                 unstash 'workspace-cd'
