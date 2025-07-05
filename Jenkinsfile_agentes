@@ -13,6 +13,9 @@ pipeline {
 
         stage('Deploy (Production)') {
             agent { label 'agente1' }
+            environment {
+              PATH = "/home/agente1/.local/bin:$PATH"
+            }
             steps {
                 sh 'whoami'
                 sh 'hostname'
