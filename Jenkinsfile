@@ -61,9 +61,9 @@ pipeline {
             steps {
                 echo 'Haciendo merge a master...'
                 sh '''
-                    git config user.name "jenkins"
-                    git config user.email "jenkins@example.com"
-
+                    git config user.name "Javier Collado"
+                    git config user.email "socche@gmail.com"
+                    git config --global merge.ours.driver true
                     git fetch origin
                     git checkout master
                     git merge origin/develop --no-edit
