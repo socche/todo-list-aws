@@ -65,6 +65,8 @@ pipeline {
                     git config user.email "socche@gmail.com"
                     git config --global merge.ours.driver true
                     git fetch origin
+                    git reset --hard
+                    git clean -fdx
                     git checkout master
                     git merge origin/develop --no-edit
                     git push origin master
