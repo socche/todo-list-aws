@@ -37,7 +37,7 @@ pipeline {
             }
             steps {
                 echo 'Running REST integration tests...'
-                sh 'pytest --junitxml=report.xml test/integration/todoApiTest.py'
+                sh '/usr/local/bin/pytest --junitxml=report.xml test/integration/todoApiTest.py'
                 echo 'Publicando resultados...'
                 junit 'report.xml'
             }
