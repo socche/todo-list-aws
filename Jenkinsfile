@@ -8,6 +8,9 @@ pipeline {
                 git credentialsId: 'github-token-id',
                     branch: 'develop',
                     url: 'https://github.com/socche/todo-list-aws.git'
+                dir('config') {
+                deleteDir()
+            }
 
                 sh 'git clone --single-branch --branch staging https://github.com/socche/todo-list-aws-config.git config'
                 sh 'cp config/samconfig.toml .'
