@@ -9,9 +9,8 @@ pipeline {
                     branch: 'develop',
                     url: 'https://github.com/socche/todo-list-aws.git'
                 dir('config') {
-                deleteDir()
-            }
-
+                    deleteDir()
+                }
                 sh 'git clone --single-branch --branch staging https://github.com/socche/todo-list-aws-config.git config'
                 sh 'cp config/samconfig.toml .'
             }
@@ -22,7 +21,6 @@ pipeline {
             steps {
                 echo 'Running flake8...'
                 sh 'flake8 src/ || true'
-
                 echo 'Running bandit...'
                 sh 'bandit -r src/ || true'
             }
@@ -33,13 +31,10 @@ pipeline {
             steps {
                 echo 'Building project with SAM...'
                 sh 'sam build'
-
                 echo 'Validating template...'
                 sh 'sam validate --region us-east-1'
-
                 echo 'Deploying to Staging environment (expecting failure)...'
                 sh 'sam deploy --config-env staging --no-confirm-changeset || true'
-
                 stash name: 'workspace-ci', includes: '**/*'
             }
         }
@@ -55,6 +50,25 @@ pipeline {
                 sh '/usr/local/bin/pytest --junitxml=report.xml test/integration/todoApiTest.py'
                 echo 'Publicando resultados...'
                 junit 'report.xml'
+            }
+        }
+
+        stage('Merge to master') {
+            agent { label 'agente1' }
+            when {
+                branch 'develop'
+            }
+            steps {
+                echo 'Haciendo merge a master...'
+                sh '''
+                    git config user.name "jenkins"
+                    git config user.email "jenkins@example.com"
+
+                    git fetch origin
+                    git checkout master
+                    git merge origin/develop --no-edit
+                    git push origin master
+                '''
             }
         }
     }
