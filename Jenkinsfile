@@ -9,6 +9,10 @@ pipeline {
             }
             steps {
                 git branch: 'master', url: 'https://github.com/socche/todo-list-aws.git'
+                
+                dir('config') {
+                deleteDir()
+            }
                 sh 'git clone --single-branch --branch production https://github.com/socche/todo-list-aws-config.git config'
                 sh 'cp config/samconfig.toml .'
             }
