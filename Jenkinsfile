@@ -1,24 +1,29 @@
 pipeline {
-    agent any
+    agent none
 
     stages {
         stage('Get Code') {
+            agent { label 'agente1' }
             steps {
                 git branch: 'develop', url: 'https://github.com/socche/todo-list-aws.git'
+                sh 'git clone --single-branch --branch staging https://github.com/socche/todo-list-aws-config.git config'
+                sh 'cp config/samconfig.toml .'
             }
         }
-        
+
         stage('Static Test') {
+            agent { label 'agente1' }
             steps {
                 echo 'Running flake8...'
                 sh 'flake8 src/ || true'
-                
+
                 echo 'Running bandit...'
                 sh 'bandit -r src/ || true'
             }
         }
-        
+
         stage('Deploy (Staging)') {
+            agent { label 'agente1' }
             steps {
                 echo 'Building project with SAM...'
                 sh 'sam build'
@@ -28,14 +33,18 @@ pipeline {
 
                 echo 'Deploying to Staging environment (expecting failure)...'
                 sh 'sam deploy --config-env staging --no-confirm-changeset || true'
+
+                stash name: 'workspace-ci', includes: '**/*'
             }
         }
-        
+
         stage('REST Test') {
+            agent { label 'agente2' }
             environment {
                 BASE_URL = 'https://iw3lwsx0mj.execute-api.us-east-1.amazonaws.com/Prod'
             }
             steps {
+                unstash 'workspace-ci'
                 echo 'Running REST integration tests...'
                 sh '/usr/local/bin/pytest --junitxml=report.xml test/integration/todoApiTest.py'
                 echo 'Publicando resultados...'
