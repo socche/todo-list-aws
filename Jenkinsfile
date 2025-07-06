@@ -68,6 +68,7 @@ pipeline {
                     git reset --hard
                     git clean -fdx
                     git checkout master
+                    git config merge.ours.driver true
                     git merge origin/develop --no-edit
                     git push origin master
                 '''
