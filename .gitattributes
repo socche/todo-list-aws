@@ -3,4 +3,3 @@ Jenkinsfile_agentes merge=ours
 samconfig.toml merge=ours
 .gitignore merge=ours
 .gitattributes merge=ours
-
