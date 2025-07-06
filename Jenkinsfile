@@ -5,7 +5,10 @@ pipeline {
         stage('Get Code') {
             agent { label 'agente1' }
             steps {
-                git branch: 'develop', url: 'https://github.com/socche/todo-list-aws.git'
+                git credentialsId: 'github-token-id',
+                    branch: 'develop',
+                    url: 'https://github.com/socche/todo-list-aws.git'
+
                 sh 'git clone --single-branch --branch staging https://github.com/socche/todo-list-aws-config.git config'
                 sh 'cp config/samconfig.toml .'
             }
