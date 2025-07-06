@@ -1,6 +1,9 @@
 pipeline {
     agent none
-
+    
+    environment {
+    PATH = "/home/agente1/.local/bin:$PATH"
+    }
     stages {
         stage('Get Code') {
             agent { label 'agente1' }
