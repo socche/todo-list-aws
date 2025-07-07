@@ -64,12 +64,21 @@ pipeline {
                     git config user.name "Javier Collado"
                     git config user.email "socche@gmail.com"
                     git config --global merge.ours.driver true
-                    git fetch origin
-                    git reset --hard
-                    git clean -fdx
+
+                    git fetch --all
+
+                    echo "Actualizando rama develop..."
+                    git checkout develop
+                    git pull origin develop
+
+                    echo "Actualizando rama master..."
                     git checkout master
-                    git config merge.ours.driver true
-                    git merge origin/develop --no-edit
+                    git pull origin master
+
+                    echo "Haciendo merge local desde develop (no origin/develop)..."
+                    git merge develop --no-edit || true
+
+                    echo "Haciendo push a master..."
                     git push origin master
                 '''
             }
