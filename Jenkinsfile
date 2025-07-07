@@ -59,6 +59,7 @@ pipeline {
                 branch 'develop'
             }
             steps {
+                withCredentials([usernamePassword(credentialsId: 'github-token-id', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_TOKEN')]) {
                 echo 'Haciendo merge a master...'
                 sh '''
                     git config user.name "Javier Collado"
