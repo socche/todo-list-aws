@@ -86,7 +86,7 @@ pipeline {
                         git merge develop --no-edit || true
 
                         echo "Haciendo push a master..."
-                        git push origin master
+                        git push https://${GIT_USERNAME}:${GIT_TOKEN}@github.com/socche/todo-list-aws.git master
                     '''
                 }
             }
